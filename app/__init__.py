@@ -2,6 +2,7 @@ from flask import Flask
 from flask_bcrypt import Bcrypt
 from app.routes.auth_routes import auth_bp
 from app.routes.user_routes import user_bp
+from app.routes.ad_routes import ad_bp
 from app.assets.create_tables import Tables
 from flask_cors import CORS
 
@@ -13,8 +14,9 @@ def create_app():
     
     bcrypt.init_app(app)    
     
-    app.register_blueprint(auth_bp, )
+    app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(ad_bp)
     
     with app.app_context():
         Tables.create_users_table()

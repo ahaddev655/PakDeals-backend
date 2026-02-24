@@ -59,6 +59,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -100,6 +101,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -137,6 +139,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -173,6 +176,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -211,6 +215,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -246,6 +251,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
                     ON DELETE CASCADE
@@ -281,6 +287,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
@@ -314,6 +321,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
@@ -357,6 +365,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
@@ -396,6 +405,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)
@@ -430,6 +440,7 @@ class Tables:
                 isExpired BOOLEAN DEFAULT FALSE,
                 isPayment BOOLEAN DEFAULT FALSE,
                 payment_due_at TIMESTAMP NULL DEFAULT NULL,
+                isPending BOOLEAN DEFAULT TRUE,
                 
                 FOREIGN KEY (user_id)
                     REFERENCES users(id)

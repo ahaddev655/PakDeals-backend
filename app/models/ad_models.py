@@ -1,0 +1,166 @@
+from app.database.db import get_connection
+import pymysql
+
+
+class Ad:
+    # ==================== AD COUNT ====================
+    @staticmethod
+    def fetch_ads_():
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        sql = """
+        SELECT 
+            (SELECT COUNT(*) FROM animal_ads) +
+            (SELECT COUNT(*) FROM bikes_ads) +
+            (SELECT COUNT(*) FROM electronics_ads) +
+            (SELECT COUNT(*) FROM fashion_ads) +
+            (SELECT COUNT(*) FROM furniture_ads) +
+            (SELECT COUNT(*) FROM kids_ads) +
+            (SELECT COUNT(*) FROM mobile_ads) +
+            (SELECT COUNT(*) FROM motors_ads) +
+            (SELECT COUNT(*) FROM property_rent_ads) +
+            (SELECT COUNT(*) FROM property_sale_ads)
+        AS total_ads
+        """
+
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return result["total_ads"]
+
+
+    @staticmethod
+    def expired_ads_():
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        sql = """
+        SELECT 
+            (SELECT COUNT(*) FROM animal_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM bikes_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM electronics_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM fashion_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM furniture_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM kids_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM mobile_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM motors_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM property_rent_ads WHERE isExpired = TRUE) +
+            (SELECT COUNT(*) FROM property_sale_ads WHERE isExpired = TRUE)
+        AS expired_ads
+        """
+
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return result["expired_ads"]
+
+
+    @staticmethod
+    def active_ads_():
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        sql = """
+        SELECT 
+            (SELECT COUNT(*) FROM animal_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM bikes_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM electronics_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM fashion_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM furniture_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM kids_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM mobile_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM motors_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM property_rent_ads WHERE isActive = TRUE) +
+            (SELECT COUNT(*) FROM property_sale_ads WHERE isActive = TRUE)
+        AS active_ads
+        """
+
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return result["active_ads"]
+
+
+    @staticmethod
+    def pending_ads_():
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+
+        sql = """
+        SELECT 
+            (SELECT COUNT(*) FROM animal_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM bikes_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM electronics_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM fashion_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM furniture_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM kids_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM mobile_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM motors_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM property_rent_ads WHERE isPending = TRUE) +
+            (SELECT COUNT(*) FROM property_sale_ads WHERE isPending = TRUE)
+        AS pending_ads
+        """
+
+        cursor.execute(sql)
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        return result["pending_ads"]
+    
+    # ==================== AD FETCHED BY ID ====================
+    def fetch_ads_by_id(id):
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+    
+        tables = [
+            "animal_ads", "bikes_ads", "electronics_ads", "fashion_ads",
+            "furniture_ads", "kids_ads", "mobile_ads", "motors_ads",
+            "property_rent_ads", "property_sale_ads"
+        ]
+    
+        all_ads = {}
+    
+        for table in tables:
+            cursor.execute(f"SELECT * FROM {table} WHERE user_id = %s", (id,))
+            all_ads[table] = cursor.fetchall()
+    
+        cursor.close()
+        conn.close()
+    
+        return all_ads
+    # ==================== AD DELETE BY ID ====================
+    def delete_ad_by_id(ad_id):
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        tables = [
+            "animal_ads", "bikes_ads", "electronics_ads", "fashion_ads",
+            "furniture_ads", "kids_ads", "mobile_ads", "motors_ads",
+            "property_rent_ads", "property_sale_ads"
+        ]
+
+        deleted = False
+
+        for table in tables:
+            cursor.execute(f"DELETE FROM {table} WHERE id = %s", (ad_id,))
+            if cursor.rowcount > 0:
+                deleted = True
+                break
+            
+        conn.commit()
+        cursor.close()
+        conn.close()
+
+        return deleted
