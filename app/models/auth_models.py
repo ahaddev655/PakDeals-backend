@@ -1,12 +1,15 @@
 from app.database.db import get_connection
 
+
 class Auth:
     @staticmethod
     def create_user(firstName, lastName, email, password, token, is_google_user=False):
         conn = get_connection()
         cursor = conn.cursor()
         sql = "INSERT INTO users (firstName, lastName, email, password, token, is_google_user) VALUES (%s, %s, %s, %s, %s, %s)"
-        cursor.execute(sql, (firstName, lastName, email, password, token, is_google_user))
+        cursor.execute(
+            sql, (firstName, lastName, email, password, token, is_google_user)
+        )
         conn.commit()
         cursor.close()
         conn.close()

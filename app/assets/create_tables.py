@@ -7,7 +7,8 @@ class Tables:
     def create_users_table():
         conn = get_connection()
         cursor = conn.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS users (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 firstName VARCHAR(50) NOT NULL,
@@ -26,7 +27,8 @@ class Tables:
                 buisnessType VARCHAR(255) DEFAULT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
-        """)
+        """
+        )
         conn.commit()
         cursor.close()
         conn.close()
@@ -35,7 +37,8 @@ class Tables:
     def create_animals_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS animal_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -65,7 +68,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -74,7 +78,8 @@ class Tables:
     def create_bikes_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS bikes_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -108,7 +113,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -117,7 +123,8 @@ class Tables:
     def create_books_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS books_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -147,7 +154,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -156,7 +164,8 @@ class Tables:
     def create_electronics_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS electronics_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -185,7 +194,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -194,7 +204,8 @@ class Tables:
     def create_fashion_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS fashion_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -225,7 +236,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -234,7 +246,8 @@ class Tables:
     def create_furniture_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS furniture_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -262,16 +275,18 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
-        
+
     # ==================== KIDS ADS TABLE ====================
     def create_kids_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS kids_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -300,16 +315,18 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
-        
+
     # ==================== MOBILES ADS TABLE ====================
     def create_mobile_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS mobile_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -335,16 +352,18 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
-        
+
     # ==================== MOTORS ADS TABLE ====================
     def create_motors_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS motors_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -380,7 +399,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
@@ -389,7 +409,8 @@ class Tables:
     def create_property_rent_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS property_rent_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -421,16 +442,18 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()
-        
+
     # ==================== PROPERTY SALE ADS TABLE ====================
     def create_property_sale_ads_table():
         connection = get_connection()
         cursor = connection.cursor()
-        cursor.execute("""
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS property_sale_ads (
                 id INT AUTO_INCREMENT PRIMARY KEY,
                 user_id INT NOT NULL,
@@ -457,7 +480,8 @@ class Tables:
                     REFERENCES users(id)
                     ON DELETE CASCADE
             ) ENGINE=InnoDB;
-        """)
+        """
+        )
         connection.commit()
         cursor.close()
         connection.close()

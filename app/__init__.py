@@ -8,26 +8,26 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 import cloudinary
 import os
+
 bcrypt = Bcrypt()
+
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
     load_dotenv()
-    bcrypt.init_app(app)  
-    
-    
+    bcrypt.init_app(app)
 
     cloudinary.config(
         cloud_name=os.getenv("CLOUDINARY_NAME"),
         api_key=os.getenv("CLOUDINARY_API_KEY"),
-        api_secret=os.getenv("CLOUDINARY_API_SECRET")
-    )  
-    
+        api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    )
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)
     app.register_blueprint(ad_bp)
-    
+
     with app.app_context():
         Tables.create_users_table()
         Tables.create_animals_ads_table()
@@ -41,5 +41,5 @@ def create_app():
         Tables.create_motors_ads_table()
         Tables.create_property_sale_ads_table()
         Tables.create_property_rent_ads_table()
-    
+
     return app

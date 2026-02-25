@@ -4,6 +4,7 @@ import os
 
 load_dotenv()
 
+
 class Config:
     MYSQL_HOST = os.getenv("MYSQL_HOST")
     MYSQL_USER = os.getenv("MYSQL_USER")

@@ -33,7 +33,6 @@ class Ad:
 
         return result["total_ads"]
 
-
     @staticmethod
     def expired_ads_():
         conn = get_connection()
@@ -61,7 +60,6 @@ class Ad:
         conn.close()
 
         return result["expired_ads"]
-
 
     @staticmethod
     def active_ads_():
@@ -91,7 +89,6 @@ class Ad:
 
         return result["active_ads"]
 
-
     @staticmethod
     def pending_ads_():
         conn = get_connection()
@@ -119,37 +116,52 @@ class Ad:
         conn.close()
 
         return result["pending_ads"]
-    
+
     # ==================== AD FETCHED BY ID ====================
     def fetch_ads_by_id(id):
         conn = get_connection()
         cursor = conn.cursor()
-    
+
         tables = [
-            "animal_ads", "bikes_ads", "electronics_ads", "fashion_ads",
-            "furniture_ads", "kids_ads", "mobile_ads", "motors_ads",
-            "property_rent_ads", "property_sale_ads"
+            "animal_ads",
+            "bikes_ads",
+            "electronics_ads",
+            "fashion_ads",
+            "furniture_ads",
+            "kids_ads",
+            "mobile_ads",
+            "motors_ads",
+            "property_rent_ads",
+            "property_sale_ads",
         ]
-    
+
         all_ads = {}
-    
+
         for table in tables:
             cursor.execute(f"SELECT * FROM {table} WHERE user_id = %s", (id,))
             all_ads[table] = cursor.fetchall()
-    
+
         cursor.close()
         conn.close()
-    
+
         return all_ads
+
     # ==================== AD DELETE BY ID ====================
     def delete_ad_by_id(ad_id):
         conn = get_connection()
         cursor = conn.cursor()
 
         tables = [
-            "animal_ads", "bikes_ads", "electronics_ads", "fashion_ads",
-            "furniture_ads", "kids_ads", "mobile_ads", "motors_ads",
-            "property_rent_ads", "property_sale_ads"
+            "animal_ads",
+            "bikes_ads",
+            "electronics_ads",
+            "fashion_ads",
+            "furniture_ads",
+            "kids_ads",
+            "mobile_ads",
+            "motors_ads",
+            "property_rent_ads",
+            "property_sale_ads",
         ]
 
         deleted = False
@@ -159,23 +171,36 @@ class Ad:
             if cursor.rowcount > 0:
                 deleted = True
                 break
-            
+
         conn.commit()
         cursor.close()
         conn.close()
 
         return deleted
-    
 
-    def add_animal_ad(subCategory, type, sex, vaccinationStatus, location,
-                      features, breed, age, color, images, id, 
-                      adTitle, description, price, sellerName, sellerContact,):
-                      
+    def add_animal_ad(
+        subCategory,
+        type,
+        sex,
+        vaccinationStatus,
+        location,
+        features,
+        breed,
+        age,
+        color,
+        images,
+        id,
+        adTitle,
+        description,
+        price,
+        sellerName,
+        sellerContact,
+    ):
+
         conn = get_connection()
         cursor = conn.cursor()
 
-        # Calculate payment_due_at as one month from now
-        payment_due_at = datetime.now() + timedelta(days=30)  # approx 1 month
+        payment_due_at = datetime.now() + timedelta(days=30)
 
         sql = """
         INSERT INTO animal_ads 
@@ -185,11 +210,98 @@ class Ad:
          features, breed, age, color, images, payment_due_at)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
-        cursor.execute(sql, (
-            id,subCategory, type, sex, vaccinationStatus, location,
-            adTitle, description, price, sellerName, sellerContact,
-            features, breed, age, color, images, payment_due_at
-        ))
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                type,
+                sex,
+                vaccinationStatus,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                features,
+                breed,
+                age,
+                color,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return
+
+    def add_bike_ad(
+        id,
+        subCategory,
+        make,
+        engineType,
+        engineCapacity,
+        ignitionType,
+        origin,
+        condition,
+        registrationCity,
+        location,
+        adTitle,
+        description,
+        price,
+        sellerName,
+        sellerContact,
+        features,
+        model,
+        year,
+        kmDriven,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO bikes_ads
+            (user_id, subCategory, make, engineType, engineCapacity, ignitionType,
+             `origin`, `condition`, registrationCity, location, adTitle, description,
+             price, sellerName, sellerContact, features, model, year,
+             kmDriven, images, payment_due_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                make,
+                engineType,
+                engineCapacity,
+                ignitionType,
+                origin,
+                condition,
+                registrationCity,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                features,
+                model,
+                year,
+                kmDriven,
+                images,
+                payment_due_at,
+            ),
+        )
         conn.commit()
         last_id = cursor.lastrowid
 
