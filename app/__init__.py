@@ -5,14 +5,24 @@ from app.routes.user_routes import user_bp
 from app.routes.ad_routes import ad_bp
 from app.assets.create_tables import Tables
 from flask_cors import CORS
-
+from dotenv import load_dotenv
+import cloudinary
+import os
 bcrypt = Bcrypt()
 
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    load_dotenv()
+    bcrypt.init_app(app)  
     
-    bcrypt.init_app(app)    
+    
+
+    cloudinary.config(
+        cloud_name=os.getenv("CLOUDINARY_NAME"),
+        api_key=os.getenv("CLOUDINARY_API_KEY"),
+        api_secret=os.getenv("CLOUDINARY_API_SECRET")
+    )  
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(user_bp)

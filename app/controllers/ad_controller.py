@@ -1,5 +1,8 @@
 from flask import request, jsonify
 from ..models.ad_models import Ad
+import cloudinary.uploader
+import json
+from app.database.db import get_connection
 
 class AdController:
     # ==================== FETCH ALL ADS ====================
@@ -18,6 +21,7 @@ class AdController:
             return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
         
     # ==================== FETCH USER ADS ====================
+    @staticmethod
     def fetchUserAds(id):
         try:
             all_user_ads = Ad.fetch_ads_by_id(id)
@@ -29,6 +33,7 @@ class AdController:
             return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
         
     # ==================== DELETE USER ADS ====================
+    @staticmethod
     def deleteUserAd(id):
         try:
             all_ads = Ad.fetch_ads_by_id(id)
@@ -40,6 +45,54 @@ class AdController:
             
             return jsonify({"message": "Ad deleted successfully",}), 201
             
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+        
+    # ==================== ADD ANIMAL AD ====================
+    @staticmethod
+    def addAnimalAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            type = request.form.get("type")
+            sex = request.form.get("sex")
+            vaccinationStatus = request.form.get("vaccinationStatus")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            price = request.form.get("price")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+            features = request.form.get("features")
+            breed = request.form.get("breed")
+            age = request.form.get("age")
+            color = request.form.get("color")
+
+            images = request.files.getlist("images")
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            # Insert ad
+            last_id = Ad.add_animal_ad(
+                subCategory, type, sex, vaccinationStatus, location,
+                features, breed, age, color, images_json, id,
+                adTitle, description, price, sellerName, sellerContact
+            )
+
+            cursor.close()
+            conn.close()
+            return jsonify({"message": "Ad created successfully", "ad_id": last_id}), 201
+
         except Exception as e:
             print(e)
             return jsonify({"details": str(e), "error": "Internal Server Error"}), 500

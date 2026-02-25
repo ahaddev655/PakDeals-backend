@@ -1,5 +1,6 @@
 from app.database.db import get_connection
 import pymysql
+from datetime import datetime, timedelta
 
 
 class Ad:
@@ -7,7 +8,7 @@ class Ad:
     @staticmethod
     def fetch_ads_():
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
 
         sql = """
         SELECT 
@@ -36,7 +37,7 @@ class Ad:
     @staticmethod
     def expired_ads_():
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
 
         sql = """
         SELECT 
@@ -65,7 +66,7 @@ class Ad:
     @staticmethod
     def active_ads_():
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
 
         sql = """
         SELECT 
@@ -94,7 +95,7 @@ class Ad:
     @staticmethod
     def pending_ads_():
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
 
         sql = """
         SELECT 
@@ -122,7 +123,7 @@ class Ad:
     # ==================== AD FETCHED BY ID ====================
     def fetch_ads_by_id(id):
         conn = get_connection()
-        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor = conn.cursor()
     
         tables = [
             "animal_ads", "bikes_ads", "electronics_ads", "fashion_ads",
@@ -164,3 +165,34 @@ class Ad:
         conn.close()
 
         return deleted
+    
+
+    def add_animal_ad(subCategory, type, sex, vaccinationStatus, location,
+                      features, breed, age, color, images, id, 
+                      adTitle, description, price, sellerName, sellerContact,):
+                      
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        # Calculate payment_due_at as one month from now
+        payment_due_at = datetime.now() + timedelta(days=30)  # approx 1 month
+
+        sql = """
+        INSERT INTO animal_ads 
+
+        (user_id, subCategory, type, sex, vaccinationStatus, location,
+         adTitle, description, price, sellerName, sellerContact,
+         features, breed, age, color, images, payment_due_at)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """
+        cursor.execute(sql, (
+            id,subCategory, type, sex, vaccinationStatus, location,
+            adTitle, description, price, sellerName, sellerContact,
+            features, breed, age, color, images, payment_due_at
+        ))
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
