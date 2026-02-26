@@ -125,6 +125,7 @@ class Ad:
         tables = [
             "animal_ads",
             "bikes_ads",
+            "books_ads",
             "electronics_ads",
             "fashion_ads",
             "furniture_ads",
@@ -298,6 +299,66 @@ class Ad:
                 model,
                 year,
                 kmDriven,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
+
+    def add_books_ad(
+        id,
+        subCategory,
+        itemType,
+        language,
+        format,
+        condition,
+        location,
+        adTitle,
+        description,
+        price,
+        genre,
+        author,
+        sellerName,
+        sellerContact,
+        features,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO books_ads
+            (user_id, subCategory, itemType, language, format, `condition`, location, adTitle, description,
+             price, genre, author, sellerName, sellerContact, features, images, payment_due_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                itemType,
+                language,
+                format,
+                condition,
+                location,
+                adTitle,
+                description,
+                price,
+                genre,
+                author,
+                sellerName,
+                sellerContact,
+                features,
                 images,
                 payment_due_at,
             ),

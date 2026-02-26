@@ -10,4 +10,7 @@ ad_bp.route("/delete-user-ad/<int:id>", methods=["DELETE"])(AdController.deleteU
 # ==================== ADS ROUTES ====================
 # -------------------- ANIMAL AD --------------------
 ad_bp.route("/add-animal-ad/<int:id>", methods=["POST"])(AdController.addAnimalAd)
+# -------------------- BIKE AD --------------------
 ad_bp.route("/add-bike-ad/<int:id>", methods=["POST"])(AdController.addBikeAd)
+# -------------------- BOOKS AD --------------------
+ad_bp.route("/add-book-ad/<int:id>", methods=["POST"])(AdController.addBookAd)

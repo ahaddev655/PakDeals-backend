@@ -206,3 +206,66 @@ class AdController:
         except Exception as e:
             print(e)
             return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+
+    # ==================== ADD BOOKS AD ====================
+    @staticmethod
+    def addBookAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            itemType = request.form.get("itemType")
+            language = request.form.get("language")
+            format = request.form.get("format")
+            condition = request.form.get("condition")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            price = request.form.get("price")
+            genre = request.form.get("genre")
+            author = request.form.get("author")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+            features = request.form.get("features")
+
+            images = request.files.getlist("images")
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            last_id = Ad.add_books_ad(
+                id,
+                subCategory,
+                itemType,
+                language,
+                format,
+                condition,
+                location,
+                adTitle,
+                description,
+                price,
+                genre,
+                author,
+                sellerName,
+                sellerContact,
+                features,
+                images_json,
+            )
+
+            cursor.close()
+            conn.close()
+            return (
+                jsonify({"message": "Ad created successfully", "ad_id": last_id}),
+                201,
+            )
+
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
