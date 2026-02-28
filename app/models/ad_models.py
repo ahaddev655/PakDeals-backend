@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 
 class Ad:
-    # ==================== AD COUNT ====================
+    # ==================== TOTAL AD COUNT ====================
     @staticmethod
     def fetch_ads_():
         conn = get_connection()
@@ -33,6 +33,7 @@ class Ad:
 
         return result["total_ads"]
 
+    # ==================== EXPIRED AD COUNT ====================
     @staticmethod
     def expired_ads_():
         conn = get_connection()
@@ -61,6 +62,7 @@ class Ad:
 
         return result["expired_ads"]
 
+    # ==================== ACTIVE AD COUNT ====================
     @staticmethod
     def active_ads_():
         conn = get_connection()
@@ -89,6 +91,7 @@ class Ad:
 
         return result["active_ads"]
 
+    # ==================== PENDING AD COUNT ====================
     @staticmethod
     def pending_ads_():
         conn = get_connection()
@@ -148,37 +151,21 @@ class Ad:
         return all_ads
 
     # ==================== AD DELETE BY ID ====================
-    def delete_ad_by_id(ad_id):
+    def delete_ad_by_id(ad_id, tableName):
         conn = get_connection()
         cursor = conn.cursor()
 
-        tables = [
-            "animal_ads",
-            "bikes_ads",
-            "electronics_ads",
-            "fashion_ads",
-            "furniture_ads",
-            "kids_ads",
-            "mobile_ads",
-            "motors_ads",
-            "property_rent_ads",
-            "property_sale_ads",
-        ]
-
-        deleted = False
-
-        for table in tables:
-            cursor.execute(f"DELETE FROM {table} WHERE id = %s", (ad_id,))
-            if cursor.rowcount > 0:
-                deleted = True
-                break
-
+        cursor.execute(f"DELETE FROM {tableName} WHERE id = %s", (ad_id,))
         conn.commit()
+
+        rows_deleted = cursor.rowcount
+
         cursor.close()
         conn.close()
 
-        return deleted
+        return rows_deleted > 0
 
+    # ==================== ADD ANIMAL AD ====================
     def add_animal_ad(
         subCategory,
         type,
@@ -238,8 +225,9 @@ class Ad:
 
         cursor.close()
         conn.close()
-        return
+        return last_id
 
+    # ==================== ADD BIKES AD ====================
     def add_bike_ad(
         id,
         subCategory,
@@ -310,6 +298,7 @@ class Ad:
         conn.close()
         return last_id
 
+    # ==================== ADD BOOKS AD ====================
     def add_books_ad(
         id,
         subCategory,
@@ -359,6 +348,248 @@ class Ad:
                 sellerName,
                 sellerContact,
                 features,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
+
+    # ==================== ADD ELECTRONICS AD ====================
+    def add_electronics_ad(
+        id,
+        subCategory,
+        brand,
+        warranty,
+        condition,
+        location,
+        adTitle,
+        description,
+        price,
+        sellerName,
+        sellerContact,
+        features,
+        type,
+        model,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO electronics_ads
+            (user_id, subCategory, brand, `condition`, warranty, location,
+             adTitle, description, price, sellerName, sellerContact, features, type,
+             model, images, payment_due_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                brand,
+                condition,
+                warranty,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                features,
+                type,
+                model,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
+
+    # ==================== ADD FASHION AD ====================
+    def add_fashion_ad(
+        id,
+        subCategory,
+        brand,
+        gender,
+        size,
+        material,
+        condition,
+        type,
+        location,
+        adTitle,
+        description,
+        price,
+        sellerName,
+        sellerContact,
+        color,
+        features,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO fashion_ads
+            (user_id, subCategory, brand, gender, size, material, 
+             `condition`, type, location, adTitle, description, color, 
+             features, price, sellerName, sellerContact, images, payment_due_at)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                brand,
+                gender,
+                size,
+                material,
+                condition,
+                type,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                color,
+                features,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
+
+    # ==================== ADD FURNITURE AD ====================
+    def add_furniture_ad(
+        id,
+        subCategory,
+        itemType,
+        material,
+        condition,
+        location,
+        adTitle,
+        description,
+        brand,
+        dimensions,
+        features,
+        price,
+        sellerName,
+        sellerContact,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO furniture_ads
+             (user_id, subCategory, itemType, material, `condition`, location,
+             adTitle, description, brand, dimensions, features, price,
+             sellerName, sellerContact, images, payment_due_at)
+             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                itemType,
+                material,
+                condition,
+                location,
+                adTitle,
+                description,
+                brand,
+                dimensions,
+                features,
+                price,
+                sellerName,
+                sellerContact,
+                images,
+                payment_due_at,
+            ),
+        )
+        conn.commit()
+        last_id = cursor.lastrowid
+
+        cursor.close()
+        conn.close()
+        return last_id
+
+    # ==================== ADD KIDS AD ====================
+    def add_kids_ad(
+        id,
+        subCategory,
+        itemType,
+        ageGroup,
+        condition,
+        location,
+        adTitle,
+        description,
+        brand,
+        features,
+        price,
+        sellerName,
+        sellerContact,
+        images,
+    ):
+
+        conn = get_connection()
+        cursor = conn.cursor()
+
+        payment_due_at = datetime.now() + timedelta(days=30)
+
+        sql = """
+            INSERT INTO kids_ads
+             (user_id, subCategory, itemType, ageGroup, `condition`, location,
+             adTitle, description, brand, features, price, sellerName,
+             sellerContact, images, payment_due_at)
+             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
+
+        cursor.execute(
+            sql,
+            (
+                id,
+                subCategory,
+                itemType,
+                ageGroup,
+                condition,
+                location,
+                adTitle,
+                description,
+                brand,
+                features,
+                price,
+                sellerName,
+                sellerContact,
                 images,
                 payment_due_at,
             ),

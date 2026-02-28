@@ -51,14 +51,17 @@ class AdController:
 
     # ==================== DELETE USER ADS ====================
     @staticmethod
-    def deleteUserAd(id):
+    def deleteUserAd(id, table_name):
         try:
             all_ads = Ad.fetch_ads_by_id(id)
 
             if len(all_ads) == 0:
                 return jsonify({"error": "Ad not found"}), 400
 
-            Ad.delete_ad_by_id(ad_id=id)
+            deleted = Ad.delete_ad_by_id(ad_id=id, tableName=table_name)
+
+            if not deleted:
+                return jsonify({"error": "Ad could not be deleted"}), 500
 
             return (
                 jsonify(
@@ -66,7 +69,7 @@ class AdController:
                         "message": "Ad deleted successfully",
                     }
                 ),
-                201,
+                200,
             )
 
         except Exception as e:
@@ -256,6 +259,253 @@ class AdController:
                 sellerName,
                 sellerContact,
                 features,
+                images_json,
+            )
+
+            cursor.close()
+            conn.close()
+            return (
+                jsonify({"message": "Ad created successfully", "ad_id": last_id}),
+                201,
+            )
+
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+
+    # ==================== ADD ELECTRONICS AD ====================
+    @staticmethod
+    def addElectronicsAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            brand = request.form.get("brand")
+            condition = request.form.get("condition")
+            warranty = request.form.get("warranty")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            price = request.form.get("price")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+            features = request.form.get("features")
+            type = request.form.get("type")
+            model = request.form.get("model")
+
+            images = request.files.getlist("images")
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            last_id = Ad.add_electronics_ad(
+                id,
+                subCategory,
+                brand,
+                condition,
+                warranty,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                features,
+                type,
+                model,
+                images_json,
+            )
+
+            cursor.close()
+            conn.close()
+            return (
+                jsonify({"message": "Ad created successfully", "ad_id": last_id}),
+                201,
+            )
+
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+
+    # ==================== ADD FASHION AD ====================
+    @staticmethod
+    def addFashionAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            brand = request.form.get("brand")
+            gender = request.form.get("gender")
+            size = request.form.get("size")
+            material = request.form.get("material")
+            condition = request.form.get("condition")
+            type = request.form.get("type")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            price = request.form.get("price")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+            features = request.form.get("features")
+            color = request.form.get("color")
+
+            images = request.files.getlist("images")
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            last_id = Ad.add_fashion_ad(
+                id,
+                subCategory,
+                brand,
+                gender,
+                size,
+                material,
+                condition,
+                type,
+                location,
+                adTitle,
+                description,
+                price,
+                sellerName,
+                sellerContact,
+                features,
+                color,
+                images_json,
+            )
+
+            cursor.close()
+            conn.close()
+            return (
+                jsonify({"message": "Ad created successfully", "ad_id": last_id}),
+                201,
+            )
+
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+
+    # ==================== ADD FURNITURE AD ====================
+    @staticmethod
+    def addFurnitureAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            itemType = request.form.get("itemType")
+            material = request.form.get("material")
+            condition = request.form.get("condition")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            brand = request.form.get("brand")
+            dimensions = request.form.get("dimensions")
+            features = request.form.get("features")
+            price = request.form.get("price")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+
+            images = request.files.getlist("images")
+            print("Dimesions: ", request.form.get("dimensions"))
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            last_id = Ad.add_furniture_ad(
+                id,
+                subCategory,
+                itemType,
+                material,
+                condition,
+                location,
+                adTitle,
+                description,
+                brand,
+                dimensions,
+                features,
+                price,
+                sellerName,
+                sellerContact,
+                images_json,
+            )
+
+            cursor.close()
+            conn.close()
+            return (
+                jsonify({"message": "Ad created successfully", "ad_id": last_id}),
+                201,
+            )
+
+        except Exception as e:
+            print(e)
+            return jsonify({"details": str(e), "error": "Internal Server Error"}), 500
+
+    # ==================== ADD KIDS AD ====================
+    @staticmethod
+    def addKidsAd(id):
+        try:
+            conn = get_connection()
+            cursor = conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE id = %s", (id,))
+            if not cursor.fetchone():
+                return jsonify({"error": f"user_id {id} does not exist"}), 400
+
+            subCategory = request.form.get("subCategory")
+            itemType = request.form.get("itemType")
+            ageGroup = request.form.get("ageGroup")
+            condition = request.form.get("condition")
+            location = request.form.get("location")
+            adTitle = request.form.get("adTitle")
+            description = request.form.get("description")
+            brand = request.form.get("brand")
+            features = request.form.get("features")
+            price = request.form.get("price")
+            sellerName = request.form.get("sellerName")
+            sellerContact = request.form.get("sellerContact")
+
+            images = request.files.getlist("images")
+
+            uploaded_urls = []
+            for image in images:
+                result = cloudinary.uploader.upload(image)
+                uploaded_urls.append(result["secure_url"])
+            images_json = json.dumps(uploaded_urls)
+
+            last_id = Ad.add_kids_ad(
+                id,
+                subCategory,
+                itemType,
+                ageGroup,
+                condition,
+                location,
+                adTitle,
+                description,
+                brand,
+                features,
+                price,
+                sellerName,
+                sellerContact,
                 images_json,
             )
 
